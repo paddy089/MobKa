@@ -13,7 +13,7 @@
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorListViewPrimary"
+        android:background="@color/colorfavoritesViewPrimary"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"/>
@@ -32,7 +32,7 @@
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="@string/title_liste"/>
+            android:text="@string/title_karte"/>
 
     </FrameLayout>
 
@@ -41,8 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/colorListViewPrimary"
+        android:background="?android:attr/windowBackground"
         app:menu="@menu/navigation"/>
 
 </LinearLayout>
-    <!--android:background="?android:attr/windowBackground"-->
