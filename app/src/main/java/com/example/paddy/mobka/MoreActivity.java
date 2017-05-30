@@ -8,10 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-/**
- * Created by paddy on 30.05.17.
- */
-
 public class MoreActivity extends AppCompatActivity {
 
 
@@ -51,14 +47,14 @@ public class MoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_more);
 
-        handeMenuStuff();
+        handleMenuStuff();
 
 
 
     }
 
 
-    private void handeMenuStuff(){
+    private void handleMenuStuff(){
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 

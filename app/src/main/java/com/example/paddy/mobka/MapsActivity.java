@@ -65,6 +65,7 @@ public class MapsActivity extends AppCompatActivity {
         handleMenuStuff();
 
 
+
         // Create a mapView and give it some properties.
         mapView = (MapView) findViewById(R.id.mapview);
 
