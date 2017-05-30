@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
@@ -30,8 +33,8 @@ public class MapsActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
 
-                    Intent i2 = new Intent(MapsActivity.this, MainActivity.class);
-                    startActivity(i2);
+                    Intent i0 = new Intent(MapsActivity.this, MainActivity.class);
+                    startActivity(i0);
 
                     return true;
                 case R.id.navigation_map:
@@ -39,8 +42,8 @@ public class MapsActivity extends AppCompatActivity {
 
                     return true;
                 case R.id.navigation_more:
-                    Intent i3 = new Intent(MapsActivity.this, MoreActivity.class);
-                    startActivity(i3);
+                    Intent i2 = new Intent(MapsActivity.this, MoreActivity.class);
+                    startActivity(i2);
 
                     return true;
             }
@@ -59,8 +62,8 @@ public class MapsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        handleMenuStuff();
+
 
         // Create a mapView and give it some properties.
         mapView = (MapView) findViewById(R.id.mapview);
@@ -68,7 +71,7 @@ public class MapsActivity extends AppCompatActivity {
         // set MapBox streets style.
         mapView.setStyleUrl(Style.MAPBOX_STREETS);
 
-        Location l = mapView.getMyLocation();
+        Location myLocation = mapView.getMyLocation();
         //new LatLng(41.885, -87.679)
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(48.146944, 11.570489))
@@ -80,6 +83,33 @@ public class MapsActivity extends AppCompatActivity {
 
         mapView.onCreate(savedInstanceState);
 
+    }
+
+    private void handleMenuStuff(){
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        Menu menu = navigation.getMenu();
+        MenuItem menuItem0 = menu.getItem(0);
+        MenuItem menuItem1 = menu.getItem(1);
+        MenuItem menuItem2 = menu.getItem(2);
+
+        menuItem1.setChecked(true);
+        menuItem1.setIcon(R.drawable.ic_nav_map_active);
+
+        menuItem0.setIcon(R.drawable.ic_nav_home_inactive);
+        menuItem2.setIcon(R.drawable.ic_nav_more_inactive);
+    }
+
+    private void handleStatusBarProps(){
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhite));
     }
 
     /**

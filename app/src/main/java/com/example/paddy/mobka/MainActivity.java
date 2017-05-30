@@ -3,14 +3,15 @@ package com.example.paddy.mobka;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationMenu;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
 public class MainActivity extends AppCompatActivity {
-
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -25,13 +26,13 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_map:
 
-                    Intent i2 = new Intent(MainActivity.this, MapsActivity.class);
-                    startActivity(i2);
+                    Intent i1 = new Intent(MainActivity.this, MapsActivity.class);
+                    startActivity(i1);
 
                     return true;
                 case R.id.navigation_more:
-                    Intent i3 = new Intent(MainActivity.this, MoreActivity.class);
-                    startActivity(i3);
+                    Intent i2 = new Intent(MainActivity.this, MoreActivity.class);
+                    startActivity(i2);
 
                     return true;
             }
@@ -45,9 +46,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        handleMenuStuff();
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
 
 
 
@@ -62,6 +63,22 @@ public class MainActivity extends AppCompatActivity {
 // finally change the color
         //getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhite));
 
+    }
+
+    private void handleMenuStuff(){
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        Menu menu = navigation.getMenu();
+        MenuItem menuItem0 = menu.getItem(0);
+        MenuItem menuItem1 = menu.getItem(1);
+        MenuItem menuItem2 = menu.getItem(2);
+
+        menuItem0.setChecked(true);
+        menuItem0.setIcon(R.drawable.ic_nav_home_active);
+
+        menuItem1.setIcon(R.drawable.ic_nav_map_inactive);
+        menuItem2.setIcon(R.drawable.ic_nav_more_inactive);
     }
 
 
