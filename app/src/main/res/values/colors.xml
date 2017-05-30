@@ -15,4 +15,8 @@
 
     <color name="coloroptionsViewPrimary">#607D8B</color>
     <color name="coloroptionsViewSecondary">#34515E</color>
+
+
+    <color name="colorWhite">#fff</color>
+    <color name="colorBlack">#000</color>
 </resources>

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Lemeh</string>
-    <string name="title_liste">Museen</string>
-    <string name="title_karte">Karte</string>
-    <string name="title_favoriten">Favoriten</string>
-    <string name="title_optionen">Optionen</string>
+    <string name="title_home">Startseite</string>
+    <string name="title_map">Karte</string>
+    <string name="title_more">Mehr</string>
+    <string name="title_activity_map_view">mapViewActivity</string>
 </resources>

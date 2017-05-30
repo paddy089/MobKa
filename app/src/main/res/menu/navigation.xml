@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/navigation_liste"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/title_liste"/>
 
     <item
-        android:id="@+id/navigation_karte"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_karte"/>
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_nav_home_active"
+        android:title="@string/title_home" />
+    <!--<item
+        android:id="@+id/navigation_home_inactive"
+        android:icon="@drawable/ic_nav_home_inactive"
+        android:title="@string/title_home"
+        android:checked="false"/>-->
 
     <item
-        android:id="@+id/navigation_favoriten"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_favoriten"/>
+        android:id="@+id/navigation_map"
+        android:icon="@drawable/ic_nav_map_inactive"
+        android:title="@string/title_map" />
 
     <item
-        android:id="@+id/navigation_optionen"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_optionen"/>
+        android:id="@+id/navigation_more"
+        android:icon="@drawable/ic_nav_more_inactive"
+        android:title="@string/title_more" />
 
 </menu>
