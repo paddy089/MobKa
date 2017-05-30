@@ -47,6 +47,10 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps">
         </activity>
+        <activity
+            android:name=".MoreActivity"
+            android:label="@string/title_activity_more">
+        </activity>
     </application>
 
 </manifest> <!-- android:theme="@style/AppTheme" > --><!-- android:theme="@style/Theme.AppCompat.Light.NoActionBar"> -->

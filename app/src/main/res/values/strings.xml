@@ -3,7 +3,7 @@
     <string name="title_home">Startseite</string>
     <string name="title_map">Karte</string>
     <string name="title_more">Mehr</string>
-    <string name="title_activity_map_view">mapViewActivity</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_maps">Karte</string>
+    <string name="title_activity_more">Mehr</string>
     <string name="accessToken">pk.eyJ1IjoicGFkZHkwODkiLCJhIjoiY2ozYmkxMTh4MDA1ZTMybXFxYnFpM3BpcSJ9.QFgSlh_GqSr9vM4i2ZSuEg</string>
 </resources>
