@@ -18,28 +18,21 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Intent t;
+
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    //mTextMessage.setText(R.string.title_home);
-                    //changeColors(R.color.colorListViewPrimary, R.color.colorListViewSecondary);
-                    setContentView(R.layout.activity_main);
 
                     return true;
                 case R.id.navigation_map:
-                    //mTextMessage.setText(R.string.title_map);
-                    //changeColors(R.color.colorMapViewPrimary, R.color.colorMapViewSecondary);
-                    //item.setIcon(R.drawable.ic_nav_home_active);
 
-                    t = new Intent(getBaseContext(), MapsActivity.class);
-                    startActivity(t);
+                    Intent i2 = new Intent(MainActivity.this, MapsActivity.class);
+                    startActivity(i2);
 
-                    //startActivity(t);
                     return true;
                 case R.id.navigation_more:
-                    //mTextMessage.setText(R.string.title_more);
-                    //changeColors(R.color.coloroptionsViewPrimary, R.color.coloroptionsViewSecondary);
-                    //item.setIcon(R.drawable.ic_nav_home_active);
+                    Intent i3 = new Intent(MainActivity.this, MoreActivity.class);
+                    startActivity(i3);
+
                     return true;
             }
             return false;
@@ -51,8 +44,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
 
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
