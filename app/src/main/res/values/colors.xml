@@ -3,4 +3,20 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <!-- custom  view colors-->
+    <color name="colorMapViewPrimary">#009688</color>
+    <color name="colorMapViewSecondary">#00675B</color>
+
+    <color name="colorListViewPrimary">#2196F3</color>
+    <color name="colorListViewSecondary">#0069C0</color>
+
+    <color name="colorfavoritesViewPrimary">#E53935</color>
+    <color name="colorfavoritesViewSecondary">#BA000D</color>
+
+    <color name="coloroptionsViewPrimary">#607D8B</color>
+    <color name="coloroptionsViewSecondary">#34515E</color>
+
+
+    <color name="colorWhite">#fff</color>
+    <color name="colorBlack">#000</color>
 </resources>

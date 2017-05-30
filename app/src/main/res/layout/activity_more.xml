@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:statusBarColor="@color/colorWhite"
-    tools:context="com.example.paddy.mobka.MainActivity">
+    tools:context="com.example.paddy.mobka.MoreActivity">
 
     <FrameLayout
         android:id="@+id/content"

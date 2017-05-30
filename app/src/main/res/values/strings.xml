@@ -1,6 +1,9 @@
 <resources>
-    <string name="app_name">MobKa</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="app_name">MGuide</string>
+    <string name="title_home">Startseite</string>
+    <string name="title_map">Karte</string>
+    <string name="title_more">Mehr</string>
+    <string name="title_activity_maps">Karte</string>
+    <string name="title_activity_more">Mehr</string>
+    <string name="accessToken">pk.eyJ1IjoicGFkZHkwODkiLCJhIjoiY2ozYmkxMTh4MDA1ZTMybXFxYnFpM3BpcSJ9.QFgSlh_GqSr9vM4i2ZSuEg</string>
 </resources>
