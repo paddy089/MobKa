@@ -18,6 +18,8 @@
         android:foregroundTint="@color/colorWhite"
         android:backgroundTint="@color/colorWhite">
 
+
+
     </FrameLayout>
 
     <android.support.design.widget.BottomNavigationView
@@ -26,7 +28,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@color/colorWhite"
-        app:menu="@menu/navigation" />
+        app:menu="@menu/navigation"
+        app:itemBackground="@color/colorWhite"
+        app:itemIconTint="@color/colorBlack"
+        app:itemTextColor="@color/colorBlack"/>
 
 </LinearLayout>
     <!--android:background="?android:attr/windowBackground"-->

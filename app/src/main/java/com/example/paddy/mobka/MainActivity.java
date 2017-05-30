@@ -1,5 +1,6 @@
 package com.example.paddy.mobka;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -10,22 +11,30 @@ import android.view.WindowManager;
 
 public class MainActivity extends AppCompatActivity {
 
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
+
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Intent t;
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     //mTextMessage.setText(R.string.title_home);
                     //changeColors(R.color.colorListViewPrimary, R.color.colorListViewSecondary);
-
+                    setContentView(R.layout.activity_main);
 
                     return true;
                 case R.id.navigation_map:
                     //mTextMessage.setText(R.string.title_map);
                     //changeColors(R.color.colorMapViewPrimary, R.color.colorMapViewSecondary);
                     //item.setIcon(R.drawable.ic_nav_home_active);
+
+                    t = new Intent(getBaseContext(), MapsActivity.class);
+                    startActivity(t);
+
+                    //startActivity(t);
                     return true;
                 case R.id.navigation_more:
                     //mTextMessage.setText(R.string.title_more);
