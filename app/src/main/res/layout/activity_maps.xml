@@ -8,40 +8,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:statusBarColor="@android:color/transparent"
-    tools:context="com.example.paddy.mobka.MapsActivity">
+    tools:context="com.example.paddy.mobka.MapsActivity"
+    android:fitsSystemWindows="false">
+   <!-- android:clipToPadding="false" >-->
 
 
     <FrameLayout
         android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1.10">
 
         <com.mapbox.mapboxsdk.views.MapView
             android:id="@+id/mapview"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             mapbox:access_token="@string/accessToken" />
 
     </FrameLayout>
 
-
-<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.paddy.mobka.MapsActivity"
-    tools:showIn="@layout/activity_maps">
-
-    <com.mapbox.mapboxsdk.views.MapView
-        android:id="@+id/mapview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        mapbox:access_token="@string/accessToken" />
-
-</RelativeLayout>-->
 
     <include
         android:id="@+id/navigation"

@@ -1,15 +1,20 @@
 package com.example.paddy.mobka;
 
+import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 
 import com.mapbox.mapboxsdk.camera.CameraPosition;
@@ -64,6 +69,13 @@ public class MapsActivity extends AppCompatActivity {
 
         handleMenuStuff();
 
+        // Hide the status bar.
+        /*View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);*/
+
+        // Translucent status bar.
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
 
         // Create a mapView and give it some properties.
@@ -72,7 +84,7 @@ public class MapsActivity extends AppCompatActivity {
         // set MapBox streets style.
         mapView.setStyleUrl(Style.MAPBOX_STREETS);
 
-        Location myLocation = mapView.getMyLocation();
+        //Location myLocation = mapView.getMyLocation();
         //new LatLng(41.885, -87.679)
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(48.146944, 11.570489))
