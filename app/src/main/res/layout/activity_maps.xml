@@ -8,7 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:statusBarColor="@color/colorWhite"
+    android:statusBarColor="@android:color/transparent"
     tools:context="com.example.paddy.mobka.MapsActivity">
 
 
@@ -16,9 +16,7 @@
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:foregroundTint="@color/colorWhite"
-        android:backgroundTint="@color/colorWhite">
+        android:layout_weight="1">
 
         <com.mapbox.mapboxsdk.views.MapView
             android:id="@+id/mapview"
@@ -45,14 +43,8 @@
 
 </RelativeLayout>-->
 
-    <android.support.design.widget.BottomNavigationView
+    <include
         android:id="@+id/navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@color/colorWhite"
-        app:menu="@menu/navigation"
-        app:itemBackground="@color/colorWhite"
-        app:itemIconTint="@color/colorBlack"
-        app:itemTextColor="@color/colorBlack"/>
+        layout="@layout/bottomnavbar" />
+
 </LinearLayout>
