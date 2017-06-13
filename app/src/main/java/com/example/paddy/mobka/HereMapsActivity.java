@@ -18,18 +18,22 @@ import android.widget.Toast;
 
 import com.here.android.mpa.common.GeoBoundingBox;
 import com.here.android.mpa.common.GeoCoordinate;
+import com.here.android.mpa.common.GeoPosition;
 import com.here.android.mpa.common.Image;
 import com.here.android.mpa.common.OnEngineInitListener;
+import com.here.android.mpa.common.PositioningManager;
 import com.here.android.mpa.mapping.Map;
 import com.here.android.mpa.mapping.MapFragment;
 import com.here.android.mpa.mapping.MapMarker;
 import com.here.android.mpa.mapping.MapRoute;
+import com.here.android.mpa.mapping.PositionIndicator;
 import com.here.android.mpa.routing.RouteManager;
 import com.here.android.mpa.routing.RouteOptions;
 import com.here.android.mpa.routing.RoutePlan;
 import com.here.android.mpa.routing.RouteResult;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -71,8 +75,8 @@ public class HereMapsActivity extends AppCompatActivity {
     /**
      * Permissions that need to be explicitly requested from end user.
      */
-    private static final String[] REQUIRED_SDK_PERMISSIONS = new String[] {
-            Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE };
+    private static final String[] REQUIRED_SDK_PERMISSIONS = new String[]{
+            Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
     // map embedded in the map fragment
     private Map map = null;
@@ -89,6 +93,9 @@ public class HereMapsActivity extends AppCompatActivity {
     // MapRoute for this activity
     private MapRoute mapRoute = null;
 
+    private PositioningManager posManager;
+
+    private boolean paused = false;
 
 
     @Override
@@ -134,14 +141,13 @@ public class HereMapsActivity extends AppCompatActivity {
         handleUIStuff();
 
         // Search for the map fragment to finish setup by calling init().
-        mapFragment = (MapFragment)getFragmentManager().findFragmentById(
+        mapFragment = (MapFragment) getFragmentManager().findFragmentById(
                 R.id.mapfragment);
 
         mapFragment.init(new OnEngineInitListener() {
             @Override
             public void onEngineInitializationCompleted(
-                    OnEngineInitListener.Error error)
-            {
+                    OnEngineInitListener.Error error) {
                 if (error == OnEngineInitListener.Error.NONE) {
 
                     onMapFragmentInitializationCompleted();
@@ -152,30 +158,59 @@ public class HereMapsActivity extends AppCompatActivity {
             }
         });
 
-        /*Image i = new Image();
-        try {
-            i.setImageResource(R.mipmap.ic_launcher);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
 
-        //MapMarker m = new MapMarker(new GeoCoordinate(48.146893, 11.570602), i);
-
-       // map.addMapObject(new MapMarker(new GeoCoordinate(48.146893, 11.570602), i));
-
-
-        textViewResult = (TextView) findViewById(R.id.title);
-        textViewResult.setText(R.string.textview_routecoordinates_2waypoints);
     }
 
     private void onMapFragmentInitializationCompleted() {
         // retrieve a reference of the map from the map fragment
         map = mapFragment.getMap();
-        map.setCenter(new GeoCoordinate(48.146893, 11.570602, 0.0),
-                Map.Animation.NONE);
+
+        // My location test coordinates
+        // 48.146915, 11.570623
+
+        textViewResult = (TextView) findViewById(R.id.title);
+        textViewResult.setText(R.string.textview_routecoordinates_2waypoints);
+
+        // Register positioning listener
+        PositioningManager.getInstance().addListener(
+                new WeakReference<>(positionListener));
+
+
+        // Set my location marker to custom image
+        /*i.setImageResource(R.mipmap.ic_launcher);
+        PositionIndicator.setMarker(Image).*/
+
+        posManager = PositioningManager.getInstance();
+        posManager.start(PositioningManager.LocationMethod.GPS_NETWORK);
+
+        // Display position indicator
+        map.getPositionIndicator().setVisible(true);
+
+
+        /*if (posManager.hasValidPosition()){
+            GeoCoordinate myCoordinates = posManager.getPosition().getCoordinate();
+            map.setCenter(new GeoCoordinate(myCoordinates.getLatitude(), myCoordinates.getLongitude()),
+                    Map.Animation.NONE);
+        }*/
+
         // Set the map zoom level to the average between min and max (no
         // animation)
         map.setZoomLevel((map.getMaxZoomLevel() + map.getMinZoomLevel()) / 1);
+        //map.setZoomLevel(map.getMaxZoomLevel() - 2);
+
+
+        Image poiImage = new Image();
+        try {
+            poiImage.setImageResource(R.mipmap.ic_poi_inactive);
+            MapMarker m = new MapMarker(new GeoCoordinate(48.149689, 11.570581), poiImage);
+            map.addMapObject(m);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
     }
 
     // Functionality for taps of the "Change Map Scheme" button
@@ -188,8 +223,7 @@ public class HereMapsActivity extends AppCompatActivity {
             // Local variable representing the number of available map schemes
             int total = map.getMapSchemes().size();
 
-            if (initial_scheme.isEmpty())
-            {
+            if (initial_scheme.isEmpty()) {
                 //save the initial scheme
                 initial_scheme = current;
             }
@@ -254,7 +288,8 @@ public class HereMapsActivity extends AppCompatActivity {
                 break;
         }
     }
-    private void handleMenuStuff(){
+
+    private void handleMenuStuff() {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -270,7 +305,7 @@ public class HereMapsActivity extends AppCompatActivity {
         menuItem2.setIcon(R.drawable.ic_nav_more_inactive);
     }
 
-    private void handleUIStuff(){
+    private void handleUIStuff() {
         // Hide the status bar.
         /*View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
@@ -282,8 +317,7 @@ public class HereMapsActivity extends AppCompatActivity {
     }
 
     private RouteManager.Listener routeManagerListener =
-            new RouteManager.Listener()
-            {
+            new RouteManager.Listener() {
                 public void onCalculateRouteFinished(RouteManager.Error errorCode,
                                                      List<RouteResult> result) {
 
@@ -298,7 +332,7 @@ public class HereMapsActivity extends AppCompatActivity {
                         GeoBoundingBox gbb = result.get(0).getRoute().getBoundingBox();
                         map.zoomTo(gbb, Map.Animation.NONE,
                                 Map.MOVE_PRESERVE_ORIENTATION);
-                        int rLength = mapRoute.getRoute().getLength();
+
 
                         textViewResult.setText(
                                 String.format("Neue Pinakothek\n%d meters.",
@@ -338,11 +372,16 @@ public class HereMapsActivity extends AppCompatActivity {
 
         routePlan.setRouteOptions(routeOptions);
 
-        // 4. Select Waypoints for your routes
-        // START: Burnaby
-        routePlan.addWaypoint(new GeoCoordinate(48.146893, 11.570602));
 
-        // END: YVR Airport
+        // START:
+
+        GeoCoordinate myCoordinates = posManager.getLastKnownPosition().getCoordinate();
+
+        routePlan.addWaypoint(new GeoCoordinate(myCoordinates.getLatitude(), myCoordinates.getLongitude()));
+
+        //routePlan.addWaypoint(new GeoCoordinate(48.146893, 11.570602));
+
+        // END:
         routePlan.addWaypoint(new GeoCoordinate(48.149667, 11.571123));
 
         // 5. Retrieve Routing information via RouteManagerListener
@@ -350,11 +389,69 @@ public class HereMapsActivity extends AppCompatActivity {
                 routeManager.calculateRoute(routePlan, routeManagerListener);
 
         if (error != RouteManager.Error.NONE) {
-            Toast.makeText(getApplicationContext(),
+            /*Toast.makeText(getApplicationContext(),
                     "Route calculation failed with: " + error.toString(),
+                    Toast.LENGTH_SHORT)
+                    .show();*/
+            Toast.makeText(getApplicationContext(),
+                    "Route calculation failed",
                     Toast.LENGTH_SHORT)
                     .show();
         }
     }
+
+
+    // Define positioning listener
+    private PositioningManager.OnPositionChangedListener positionListener = new
+            PositioningManager.OnPositionChangedListener() {
+
+                public void onPositionUpdated(PositioningManager.LocationMethod method,
+                                              GeoPosition position, boolean isMapMatched) {
+                    // set the center only when the app is in the foreground
+                    // to reduce CPU consumption
+                    if (!paused) {
+                        map.setCenter(position.getCoordinate(),
+                                Map.Animation.NONE);
+                        map.setZoomLevel(map.getMaxZoomLevel() - 2, Map.Animation.LINEAR);
+                        System.out.println("onPositionUpdated");
+                    }
+                }
+
+                public void onPositionFixChanged(PositioningManager.LocationMethod method,
+                                                 PositioningManager.LocationStatus status) {
+                }
+            };
+
+
+    // Resume positioning listener on wake up
+    public void onResume() {
+        super.onResume();
+        paused = false;
+        if (posManager != null) {
+            posManager.start(
+                    PositioningManager.LocationMethod.GPS_NETWORK);
+        }
+    }
+
+    // To pause positioning listener
+    public void onPause() {
+        if (posManager != null) {
+            posManager.stop();
+        }
+        super.onPause();
+        paused = true;
+    }
+
+    // To remove the positioning listener
+    public void onDestroy() {
+        if (posManager != null) {
+            // Cleanup
+            posManager.removeListener(
+                    positionListener);
+        }
+        map = null;
+        super.onDestroy();
+    }
+
 
 }
