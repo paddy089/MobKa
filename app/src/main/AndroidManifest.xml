@@ -8,29 +8,34 @@
          location permissions for the 'MyLocation' functionality.
     -->
 
-   <!-- <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <!--
+    <manifest xmlns:android="http://schemas.android.com/apk/res/android"
         package="com.example.currentplacedetailsonmap">
         <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    </manifest>-->
+    </manifest>
+    -->
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
+        android:hardwareAccelerated="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-
-        <meta-data android:name="com.here.android.maps.appid" android:value="nlXIhJr8KIWLhcqlW2ol"/>
-        <meta-data android:name="com.here.android.maps.apptoken" android:value="8_BYvtTxPY8GDQtKKdOJMg"/>
-
+        <meta-data
+            android:name="com.here.android.maps.appid"
+            android:value="nlXIhJr8KIWLhcqlW2ol" />
+        <meta-data
+            android:name="com.here.android.maps.apptoken"
+            android:value="8_BYvtTxPY8GDQtKKdOJMg" />
 
         <activity
             android:name=".MainActivity"
@@ -54,14 +59,15 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
-        <activity
             android:name=".MoreActivity"
-            android:label="@string/title_activity_more"></activity>
+            android:label="@string/title_activity_more" />
         <activity
-            android:name=".GMapsActivity"
-            android:label="@string/title_activity_gmaps"></activity>
+            android:name=".HereMapsActivity"
+            android:label="@string/title_activity_here_maps"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
+
+
+<!-- android:icon="@drawable/icon" -->

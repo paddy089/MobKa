@@ -22,20 +22,16 @@ public class MoreActivity extends AppCompatActivity {
 
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-
                     Intent i0 = new Intent(MoreActivity.this, MainActivity.class);
                     startActivity(i0);
-
                     return true;
+
                 case R.id.navigation_map:
-
-                    Intent i1 = new Intent(MoreActivity.this, MapsActivity.class);
+                    Intent i1 = new Intent(MoreActivity.this, HereMapsActivity.class);
                     startActivity(i1);
-
                     return true;
+
                 case R.id.navigation_more:
-
-
                     return true;
             }
             return false;

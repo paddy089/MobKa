@@ -10,4 +10,5 @@
         AIzaSyAxk8XvAbZ_DrKnmCmHaykocfZDGSlEIOQ
     </string>
     <string name="title_activity_gmaps">Map</string>
+    <string name="title_activity_here_maps">HereMapsActivity</string>
 </resources>

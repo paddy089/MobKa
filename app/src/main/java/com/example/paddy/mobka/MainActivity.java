@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_map:
 
                     //Intent i1 = new Intent(MainActivity.this, MapsActivity.class);
-                    Intent i1 = new Intent(MainActivity.this, GMapsActivity.class);
+                    Intent i1 = new Intent(MainActivity.this, HereMapsActivity.class);
                     startActivity(i1);
 
                     return true;
