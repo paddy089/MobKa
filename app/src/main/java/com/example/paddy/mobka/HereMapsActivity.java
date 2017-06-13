@@ -11,6 +11,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 import com.here.android.mpa.common.GeoCoordinate;
 import com.here.android.mpa.common.OnEngineInitListener;
@@ -66,6 +68,9 @@ public class HereMapsActivity extends AppCompatActivity {
     // map fragment embedded in this activity
     private MapFragment mapFragment = null;
 
+    // Initial map scheme, initialized in onCreate() and accessed in goHome()
+    private static String initial_scheme = "";
+
 
 
     @Override
@@ -75,13 +80,15 @@ public class HereMapsActivity extends AppCompatActivity {
     }
 
 
-    private void initialize() {
+    /*private void initialize() {
         setContentView(R.layout.activity_here_maps);
         handleMenuStuff();
+        handleUIStuff();
 
         // Search for the map fragment to finish setup by calling init().
         mapFragment = (MapFragment)getFragmentManager().findFragmentById(
                 R.id.mapfragment);
+
         mapFragment.init(new OnEngineInitListener() {
             @Override
             public void onEngineInitializationCompleted(
@@ -101,6 +108,72 @@ public class HereMapsActivity extends AppCompatActivity {
                 }
             }
         });
+    }*/
+
+    private void initialize() {
+        setContentView(R.layout.activity_here_maps);
+        handleMenuStuff();
+        handleUIStuff();
+
+        // Search for the map fragment to finish setup by calling init().
+        mapFragment = (MapFragment)getFragmentManager().findFragmentById(
+                R.id.mapfragment);
+
+        mapFragment.init(new OnEngineInitListener() {
+            @Override
+            public void onEngineInitializationCompleted(
+                    OnEngineInitListener.Error error)
+            {
+                if (error == OnEngineInitListener.Error.NONE) {
+
+                    onMapFragmentInitializationCompleted();
+
+                } else {
+                    System.out.println("ERROR: Cannot initialize Map Fragment");
+                }
+            }
+        });
+    }
+
+    private void onMapFragmentInitializationCompleted() {
+        // retrieve a reference of the map from the map fragment
+        map = mapFragment.getMap();
+        map.setCenter(new GeoCoordinate(48.146893, 11.570602, 0.0),
+                Map.Animation.NONE);
+        // Set the map zoom level to the average between min and max (no
+        // animation)
+        map.setZoomLevel((map.getMaxZoomLevel() + map.getMinZoomLevel()) / 5);
+    }
+
+    // Functionality for taps of the "Change Map Scheme" button
+    public void changeScheme(View view) {
+        if (map != null) {
+            // Local variable representing the current map scheme
+            String current = map.getMapScheme();
+            // Local array containing string values of available map schemes
+            List<String> schemes = map.getMapSchemes();
+            // Local variable representing the number of available map schemes
+            int total = map.getMapSchemes().size();
+
+            if (initial_scheme.isEmpty())
+            {
+                //save the initial scheme
+                initial_scheme = current;
+            }
+
+            // If the current scheme is the last element in the array, reset to
+            // the scheme at array index 0
+            if (schemes.get(total - 1).equals(current))
+                map.setMapScheme(schemes.get(0));
+            else {
+                // If the current scheme is any other element, set to the next
+                // scheme in the array
+                for (int count = 0; count < total - 1; count++) {
+                    if (schemes.get(count).equals(current))
+                        map.setMapScheme(schemes.get(count + 1));
+                }
+            }
+        }
     }
 
 
@@ -162,6 +235,17 @@ public class HereMapsActivity extends AppCompatActivity {
 
         menuItem0.setIcon(R.drawable.ic_nav_home_inactive);
         menuItem2.setIcon(R.drawable.ic_nav_more_inactive);
+    }
+
+    private void handleUIStuff(){
+        // Hide the status bar.
+        /*View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);*/
+
+        // Translucent status bar.
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
     }
 
 }

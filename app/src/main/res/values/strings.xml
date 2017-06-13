@@ -11,4 +11,5 @@
     </string>
     <string name="title_activity_gmaps">Map</string>
     <string name="title_activity_here_maps">HereMapsActivity</string>
+    <string name="label_button_changescheme">Change Map Scheme</string>
 </resources>
