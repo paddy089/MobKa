@@ -12,25 +12,37 @@
 
     <FrameLayout
         android:id="@+id/content"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1.10">
 
         <!-- UI element declaration for "Change Map Scheme" button -->
-        <android.widget.Button
+        <!--<android.widget.Button
             android:id="@+id/schemebutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_button_changescheme"
             android:onClick="changeScheme"
-            android:layout_marginTop="60dp" />
+            android:layout_marginTop="60dp" />-->
 
 
         <fragment
-            class="com.here.android.mpa.mapping.MapFragment"
             android:id="@+id/mapfragment"
+            class="com.here.android.mpa.mapping.MapFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
+
+        <ImageButton
+            android:id="@+id/mapLayersButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="40dp"
+            android:elevation="40dp"
+            android:onClick="changeScheme"
+            android:src="@drawable/ic_map_layers" />
+        <!--android:drawableBottom="@drawable/ic_map_layers"-->
+        <!--android:backgroundTint="@android:color/transparent"-->
 
     </FrameLayout>
 

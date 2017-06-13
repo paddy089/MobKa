@@ -142,7 +142,7 @@ public class HereMapsActivity extends AppCompatActivity {
                 Map.Animation.NONE);
         // Set the map zoom level to the average between min and max (no
         // animation)
-        map.setZoomLevel((map.getMaxZoomLevel() + map.getMinZoomLevel()) / 5);
+        map.setZoomLevel((map.getMaxZoomLevel() + map.getMinZoomLevel()) / 1);
     }
 
     // Functionality for taps of the "Change Map Scheme" button
