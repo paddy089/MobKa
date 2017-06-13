@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,9 +23,12 @@ import com.here.android.mpa.common.GeoPosition;
 import com.here.android.mpa.common.Image;
 import com.here.android.mpa.common.OnEngineInitListener;
 import com.here.android.mpa.common.PositioningManager;
+import com.here.android.mpa.common.ViewObject;
 import com.here.android.mpa.mapping.Map;
 import com.here.android.mpa.mapping.MapFragment;
+import com.here.android.mpa.mapping.MapGesture;
 import com.here.android.mpa.mapping.MapMarker;
+import com.here.android.mpa.mapping.MapObject;
 import com.here.android.mpa.mapping.MapRoute;
 import com.here.android.mpa.mapping.PositionIndicator;
 import com.here.android.mpa.routing.RouteManager;
@@ -88,7 +92,9 @@ public class HereMapsActivity extends AppCompatActivity {
     private static String initial_scheme = "";
 
     // TextView for displaying the current map scheme
-    private TextView textViewResult = null;
+    private TextView routingBarTitle = null;
+    private TextView routingBarDesc = null;
+    private LinearLayout routingBarLayout = null;
 
     // MapRoute for this activity
     private MapRoute mapRoute = null;
@@ -96,7 +102,6 @@ public class HereMapsActivity extends AppCompatActivity {
     private PositioningManager posManager;
 
     private boolean paused = false;
-
     private boolean poiIsActive = false;
 
 
@@ -122,6 +127,7 @@ public class HereMapsActivity extends AppCompatActivity {
                     OnEngineInitListener.Error error) {
                 if (error == OnEngineInitListener.Error.NONE) {
 
+                    initPosManager();
                     onMapFragmentInitializationCompleted();
 
                 } else {
@@ -137,13 +143,14 @@ public class HereMapsActivity extends AppCompatActivity {
         // retrieve a reference of the map from the map fragment
         map = mapFragment.getMap();
 
+
         // My location test coordinates
         // 48.146915, 11.570623
 
-        textViewResult = (TextView) findViewById(R.id.title);
-        //textViewResult.setVisibility(View.INVISIBLE);
+        routingBarTitle = (TextView) findViewById(R.id.routeDestination);
+        routingBarDesc = (TextView) findViewById(R.id.routeDescription);
+        routingBarLayout = (LinearLayout) findViewById(R.id.routeBar);
 
-        initPosManager();
         drawPOI();
 
         // Display position indicator
@@ -154,6 +161,7 @@ public class HereMapsActivity extends AppCompatActivity {
 
         map.setZoomLevel((map.getMaxZoomLevel() + map.getMinZoomLevel()) / 1);
         //map.setZoomLevel(map.getMaxZoomLevel() - 2);
+
 
     }
 
@@ -270,8 +278,11 @@ public class HereMapsActivity extends AppCompatActivity {
             MapMarker m = new MapMarker(new GeoCoordinate(48.147082, 11.571514), poiImage);
             map.addMapObject(m);
 
+            //List h = map.getSelectedObjects(m.getAnchorPoint());
+
         } catch (IOException e) {
-            e.printStackTrace();
+            finish();
+            //e.printStackTrace();
         }
 
         try {
@@ -281,8 +292,10 @@ public class HereMapsActivity extends AppCompatActivity {
             map.addMapObject(m);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            finish();
+            //e.printStackTrace();
         }
+
     }
 
     private void initPosManager(){
@@ -301,9 +314,34 @@ public class HereMapsActivity extends AppCompatActivity {
         } else {
             poiIsActive = false;
             map.removeMapObject(mapRoute);
-            textViewResult.setVisibility(View.INVISIBLE);
+            routingBarLayout.setVisibility(View.INVISIBLE);
 
         }
+    }
+
+    private void createMarkerListener(){
+        // Create a gesture listener and add it to the MapFragment
+        MapGesture.OnGestureListener listener =
+                new MapGesture.OnGestureListener.OnGestureListenerAdapter() {
+                    @Override
+                    public boolean onMapObjectsSelected(List<ViewObject> objects) {
+                        for (ViewObject viewObj : objects) {
+                            if (viewObj.getBaseType() == ViewObject.Type.USER_OBJECT) {
+                                if (((MapObject)viewObj).getType() == MapObject.Type.MARKER) {
+                                    // At this point we have the originally added
+                                    // map marker, so we can do something with it
+                                    // (like change the visibility, or more
+                                    // marker-specific actions)
+                                    ((MapObject)viewObj).setVisible(false);
+
+                                }
+                            }
+                        }
+                        // return false to allow the map to handle this callback also
+                        return false;
+                    }
+
+                };
     }
 
     private RouteManager.Listener routeManagerListener =
@@ -320,23 +358,23 @@ public class HereMapsActivity extends AppCompatActivity {
 
                         // Get the bounding box containing the route and zoom in
                         GeoBoundingBox gbb = result.get(0).getRoute().getBoundingBox();
-                        map.zoomTo(gbb, Map.Animation.NONE,
+                        map.zoomTo(gbb, Map.Animation.LINEAR,
                                 Map.MOVE_PRESERVE_ORIENTATION);
 
-                        textViewResult.setVisibility(View.VISIBLE);
+                        routingBarLayout.setVisibility(View.VISIBLE);
 
-                        textViewResult.setText(
-                                String.format("Neue Pinakothek\n%d meters.",
+                        routingBarDesc.setText(
+                                String.format("%d Meter",
                                         result.get(0).getRoute().getLength()));
                     } else {
-                        textViewResult.setText(
+                        routingBarTitle.setText(
                                 String.format("Route calculation failed: %s",
                                         errorCode.toString()));
                     }
                 }
 
                 public void onProgress(int percentage) {
-                    textViewResult.setText(
+                    routingBarDesc.setText(
                             String.format("... %d percent done ...", percentage));
                 }
             };
@@ -345,7 +383,7 @@ public class HereMapsActivity extends AppCompatActivity {
     public void getDirections(View view) {
 
         // 1. clear previous results
-        textViewResult.setText("");
+        routingBarDesc.setText("");
         if (map != null && mapRoute != null) {
             map.removeMapObject(mapRoute);
             mapRoute = null;

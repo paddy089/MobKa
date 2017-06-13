@@ -14,7 +14,6 @@
     <string name="label_button_changescheme">Change Map Scheme</string>
 
     <string name="label_button_getdirections">Get Directions</string>
-    <string name="textview_routecoordinates_2waypoints">
-            Neue Pinakothek
-    </string>
+    <string name="routeTextview_destination">Neue Pinakothek</string>
+    <string name="routeTextview_description">-</string>
 </resources>
