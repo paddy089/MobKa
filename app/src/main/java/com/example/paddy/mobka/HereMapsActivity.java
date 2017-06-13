@@ -97,6 +97,8 @@ public class HereMapsActivity extends AppCompatActivity {
 
     private boolean paused = false;
 
+    private boolean poiIsActive = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,39 +106,9 @@ public class HereMapsActivity extends AppCompatActivity {
         checkPermissions();
     }
 
-
-    /*private void initialize() {
-        setContentView(R.layout.activity_here_maps);
-        handleMenuStuff();
-        handleUIStuff();
-
-        // Search for the map fragment to finish setup by calling init().
-        mapFragment = (MapFragment)getFragmentManager().findFragmentById(
-                R.id.mapfragment);
-
-        mapFragment.init(new OnEngineInitListener() {
-            @Override
-            public void onEngineInitializationCompleted(
-                    OnEngineInitListener.Error error)
-            {
-                if (error == OnEngineInitListener.Error.NONE) {
-                    // retrieve a reference of the map from the map fragment
-                    map = mapFragment.getMap();
-                    // Set the map center to the Vancouver region (no animation)
-                    map.setCenter(new GeoCoordinate(49.196261, -123.004773, 0.0),
-                            Map.Animation.NONE);
-                    // Set the zoom level to the average between min and max
-                    map.setZoomLevel(
-                            (map.getMaxZoomLevel() + map.getMinZoomLevel()) / 5);
-                } else {
-                    System.out.println("ERROR: Cannot initialize Map Fragment");
-                }
-            }
-        });
-    }*/
-
     private void initialize() {
         setContentView(R.layout.activity_here_maps);
+
         handleMenuStuff();
         handleUIStuff();
 
@@ -169,47 +141,19 @@ public class HereMapsActivity extends AppCompatActivity {
         // 48.146915, 11.570623
 
         textViewResult = (TextView) findViewById(R.id.title);
-        textViewResult.setText(R.string.textview_routecoordinates_2waypoints);
+        //textViewResult.setVisibility(View.INVISIBLE);
 
-        // Register positioning listener
-        PositioningManager.getInstance().addListener(
-                new WeakReference<>(positionListener));
+        initPosManager();
+        drawPOI();
 
-
+        // Display position indicator
+        map.getPositionIndicator().setVisible(true);
         // Set my location marker to custom image
         /*i.setImageResource(R.mipmap.ic_launcher);
         PositionIndicator.setMarker(Image).*/
 
-        posManager = PositioningManager.getInstance();
-        posManager.start(PositioningManager.LocationMethod.GPS_NETWORK);
-
-        // Display position indicator
-        map.getPositionIndicator().setVisible(true);
-
-
-        /*if (posManager.hasValidPosition()){
-            GeoCoordinate myCoordinates = posManager.getPosition().getCoordinate();
-            map.setCenter(new GeoCoordinate(myCoordinates.getLatitude(), myCoordinates.getLongitude()),
-                    Map.Animation.NONE);
-        }*/
-
-        // Set the map zoom level to the average between min and max (no
-        // animation)
         map.setZoomLevel((map.getMaxZoomLevel() + map.getMinZoomLevel()) / 1);
         //map.setZoomLevel(map.getMaxZoomLevel() - 2);
-
-
-        Image poiImage = new Image();
-        try {
-            poiImage.setImageResource(R.mipmap.ic_poi_inactive);
-            MapMarker m = new MapMarker(new GeoCoordinate(48.149689, 11.570581), poiImage);
-            map.addMapObject(m);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
 
     }
 
@@ -316,6 +260,52 @@ public class HereMapsActivity extends AppCompatActivity {
 
     }
 
+    private void drawPOI(){
+
+        //48.147082, 11.571514
+
+        try {
+            Image poiImage = new Image();
+            poiImage.setImageResource(R.mipmap.ic_poi_inactive);
+            MapMarker m = new MapMarker(new GeoCoordinate(48.147082, 11.571514), poiImage);
+            map.addMapObject(m);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Image poiImage = new Image();
+            poiImage.setImageResource(R.mipmap.ic_poi_inactive);
+            MapMarker m = new MapMarker(new GeoCoordinate(48.149689, 11.570581), poiImage);
+            map.addMapObject(m);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initPosManager(){
+        // Register positioning listener
+        PositioningManager.getInstance().addListener(
+                new WeakReference<>(positionListener));
+
+        posManager = PositioningManager.getInstance();
+        posManager.start(PositioningManager.LocationMethod.GPS_NETWORK);
+    }
+
+    public void checkGetDirections(View view){
+        if (!poiIsActive){
+            poiIsActive = true;
+            getDirections(view);
+        } else {
+            poiIsActive = false;
+            map.removeMapObject(mapRoute);
+            textViewResult.setVisibility(View.INVISIBLE);
+
+        }
+    }
+
     private RouteManager.Listener routeManagerListener =
             new RouteManager.Listener() {
                 public void onCalculateRouteFinished(RouteManager.Error errorCode,
@@ -333,6 +323,7 @@ public class HereMapsActivity extends AppCompatActivity {
                         map.zoomTo(gbb, Map.Animation.NONE,
                                 Map.MOVE_PRESERVE_ORIENTATION);
 
+                        textViewResult.setVisibility(View.VISIBLE);
 
                         textViewResult.setText(
                                 String.format("Neue Pinakothek\n%d meters.",
@@ -352,6 +343,7 @@ public class HereMapsActivity extends AppCompatActivity {
 
     // Functionality for taps of the "Get Directions" button
     public void getDirections(View view) {
+
         // 1. clear previous results
         textViewResult.setText("");
         if (map != null && mapRoute != null) {
@@ -376,7 +368,6 @@ public class HereMapsActivity extends AppCompatActivity {
         // START:
 
         GeoCoordinate myCoordinates = posManager.getLastKnownPosition().getCoordinate();
-
         routePlan.addWaypoint(new GeoCoordinate(myCoordinates.getLatitude(), myCoordinates.getLongitude()));
 
         //routePlan.addWaypoint(new GeoCoordinate(48.146893, 11.570602));
