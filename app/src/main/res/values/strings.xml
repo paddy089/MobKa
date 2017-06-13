@@ -12,4 +12,9 @@
     <string name="title_activity_gmaps">Map</string>
     <string name="title_activity_here_maps">HereMapsActivity</string>
     <string name="label_button_changescheme">Change Map Scheme</string>
+
+    <string name="label_button_getdirections">Get Directions</string>
+    <string name="textview_routecoordinates_2waypoints">
+            Neue Pinakothek
+    </string>
 </resources>

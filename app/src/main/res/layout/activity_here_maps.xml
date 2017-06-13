@@ -39,10 +39,53 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="40dp"
             android:elevation="40dp"
+            android:backgroundTint="@android:color/transparent"
             android:onClick="changeScheme"
             android:src="@drawable/ic_map_layers" />
         <!--android:drawableBottom="@drawable/ic_map_layers"-->
         <!--android:backgroundTint="@android:color/transparent"-->
+
+        <ImageButton
+            android:id="@+id/poi1_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:layout_marginLeft="100dp"
+            android:elevation="40dp"
+            android:backgroundTint="@android:color/transparent"
+            android:onClick="getDirections"
+            android:src="@drawable/ic_poi_inactive" />
+
+        <!-- UI element declaration for "Get Directions" button -->
+        <!--<android.widget.Button
+            android:id="@+id/directionsbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:layout_marginLeft="100dp"
+            android:text="@string/label_button_getdirections"
+            android:onClick="getDirections" />-->
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_gravity="bottom"
+            android:background="@color/colorWhite">
+
+            <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:paddingLeft="45dp"
+            android:text="@string/textview_routecoordinates_2waypoints"
+            android:textColor="@color/colorGreen"
+                android:textSize="20dp"
+                android:textStyle="bold"
+
+            tools:context=".BasicMapActivity" />
+
+        </FrameLayout>
 
     </FrameLayout>
 

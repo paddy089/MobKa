@@ -13,11 +13,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.here.android.mpa.common.GeoBoundingBox;
 import com.here.android.mpa.common.GeoCoordinate;
+import com.here.android.mpa.common.Image;
 import com.here.android.mpa.common.OnEngineInitListener;
 import com.here.android.mpa.mapping.Map;
 import com.here.android.mpa.mapping.MapFragment;
+import com.here.android.mpa.mapping.MapMarker;
+import com.here.android.mpa.mapping.MapRoute;
+import com.here.android.mpa.routing.RouteManager;
+import com.here.android.mpa.routing.RouteOptions;
+import com.here.android.mpa.routing.RoutePlan;
+import com.here.android.mpa.routing.RouteResult;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -70,6 +82,12 @@ public class HereMapsActivity extends AppCompatActivity {
 
     // Initial map scheme, initialized in onCreate() and accessed in goHome()
     private static String initial_scheme = "";
+
+    // TextView for displaying the current map scheme
+    private TextView textViewResult = null;
+
+    // MapRoute for this activity
+    private MapRoute mapRoute = null;
 
 
 
@@ -133,6 +151,21 @@ public class HereMapsActivity extends AppCompatActivity {
                 }
             }
         });
+
+        /*Image i = new Image();
+        try {
+            i.setImageResource(R.mipmap.ic_launcher);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+
+        //MapMarker m = new MapMarker(new GeoCoordinate(48.146893, 11.570602), i);
+
+       // map.addMapObject(new MapMarker(new GeoCoordinate(48.146893, 11.570602), i));
+
+
+        textViewResult = (TextView) findViewById(R.id.title);
+        textViewResult.setText(R.string.textview_routecoordinates_2waypoints);
     }
 
     private void onMapFragmentInitializationCompleted() {
@@ -246,6 +279,82 @@ public class HereMapsActivity extends AppCompatActivity {
         // Translucent status bar.
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
+    }
+
+    private RouteManager.Listener routeManagerListener =
+            new RouteManager.Listener()
+            {
+                public void onCalculateRouteFinished(RouteManager.Error errorCode,
+                                                     List<RouteResult> result) {
+
+                    if (errorCode == RouteManager.Error.NONE &&
+                            result.get(0).getRoute() != null) {
+
+                        // create a map route object and place it on the map
+                        mapRoute = new MapRoute(result.get(0).getRoute());
+                        map.addMapObject(mapRoute);
+
+                        // Get the bounding box containing the route and zoom in
+                        GeoBoundingBox gbb = result.get(0).getRoute().getBoundingBox();
+                        map.zoomTo(gbb, Map.Animation.NONE,
+                                Map.MOVE_PRESERVE_ORIENTATION);
+                        int rLength = mapRoute.getRoute().getLength();
+
+                        textViewResult.setText(
+                                String.format("Neue Pinakothek\n%d meters.",
+                                        result.get(0).getRoute().getLength()));
+                    } else {
+                        textViewResult.setText(
+                                String.format("Route calculation failed: %s",
+                                        errorCode.toString()));
+                    }
+                }
+
+                public void onProgress(int percentage) {
+                    textViewResult.setText(
+                            String.format("... %d percent done ...", percentage));
+                }
+            };
+
+    // Functionality for taps of the "Get Directions" button
+    public void getDirections(View view) {
+        // 1. clear previous results
+        textViewResult.setText("");
+        if (map != null && mapRoute != null) {
+            map.removeMapObject(mapRoute);
+            mapRoute = null;
+        }
+
+        // 2. Initialize RouteManager
+        RouteManager routeManager = new RouteManager();
+
+        // 3. Select routing options via RoutingMode
+        RoutePlan routePlan = new RoutePlan();
+
+        RouteOptions routeOptions = new RouteOptions();
+        routeOptions.setTransportMode(RouteOptions.TransportMode.PEDESTRIAN);
+        routeOptions.setRouteType(RouteOptions.Type.SHORTEST);
+        routeOptions.setParksAllowed(true);
+
+        routePlan.setRouteOptions(routeOptions);
+
+        // 4. Select Waypoints for your routes
+        // START: Burnaby
+        routePlan.addWaypoint(new GeoCoordinate(48.146893, 11.570602));
+
+        // END: YVR Airport
+        routePlan.addWaypoint(new GeoCoordinate(48.149667, 11.571123));
+
+        // 5. Retrieve Routing information via RouteManagerListener
+        RouteManager.Error error =
+                routeManager.calculateRoute(routePlan, routeManagerListener);
+
+        if (error != RouteManager.Error.NONE) {
+            Toast.makeText(getApplicationContext(),
+                    "Route calculation failed with: " + error.toString(),
+                    Toast.LENGTH_SHORT)
+                    .show();
+        }
     }
 
 }
