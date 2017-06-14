@@ -1,17 +1,18 @@
 package com.example.paddy.mobka;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.internal.BottomNavigationMenu;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.WindowManager;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,7 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-
+                    /*Intent i0 = new Intent(MainActivity.this, BildergalerieActivity.class);
+                    startActivity(i0);*/
                     return true;
                 case R.id.navigation_map:
 
@@ -50,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         handleMenuStuff();
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+        ImageAdapter adapter = new ImageAdapter(this);
+        viewPager.setAdapter(adapter);
 
 
     }
@@ -86,5 +92,6 @@ public class MainActivity extends AppCompatActivity {
         navigation.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), primaryColor));
 
     }*/
+
 
 }
