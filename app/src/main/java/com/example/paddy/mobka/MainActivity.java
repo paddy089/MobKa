@@ -1,17 +1,12 @@
 package com.example.paddy.mobka;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.internal.BottomNavigationMenu;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.WindowManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,7 +19,8 @@ public class MainActivity extends AppCompatActivity {
 
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-
+                    Intent i0 = new Intent(MainActivity.this, BildergalerieActivity.class);
+                    startActivity(i0);
                     return true;
                 case R.id.navigation_map:
 
