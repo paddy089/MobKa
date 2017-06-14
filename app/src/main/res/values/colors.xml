@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">@color/colorWhite</color>
+    <color name="colorPrimaryDark">@android:color/transparent</color>
     <color name="colorAccent">#FF4081</color>
+
+
     <!-- custom  view colors-->
-    <color name="colorMapViewPrimary">#009688</color>
-    <color name="colorMapViewSecondary">#00675B</color>
-
-    <color name="colorListViewPrimary">#2196F3</color>
-    <color name="colorListViewSecondary">#0069C0</color>
-
-    <color name="colorfavoritesViewPrimary">#E53935</color>
-    <color name="colorfavoritesViewSecondary">#BA000D</color>
-
-    <color name="coloroptionsViewPrimary">#607D8B</color>
-    <color name="coloroptionsViewSecondary">#34515E</color>
-
-
     <color name="colorWhite">#fff</color>
     <color name="colorBlack">#000</color>
+    <color name="colorDarkGrey">#333</color>
+    <color name="colorGreen">#2C8381</color>
 </resources>

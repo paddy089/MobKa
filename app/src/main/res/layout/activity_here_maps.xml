@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.paddy.mobka.HereMapsActivity"
+    android:fitsSystemWindows="false">
+    <!-- android:clipToPadding="false" >-->
+
+    <FrameLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1.10">
+
+        <fragment
+            android:id="@+id/mapfragment"
+            class="com.here.android.mpa.mapping.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageButton
+            android:id="@+id/mapLayersButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="40dp"
+            android:elevation="40dp"
+            android:backgroundTint="@android:color/transparent"
+            android:onClick="changeScheme"
+            android:src="@drawable/ic_map_layers" />
+
+        <ImageButton
+            android:id="@+id/poi1_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:layout_marginLeft="100dp"
+            android:elevation="40dp"
+            android:backgroundTint="@android:color/transparent"
+            android:onClick="checkGetDirections"
+            android:src="@drawable/ic_poi_inactive" />
+        <!-- android:onClick="getDirections" -->
+
+        <LinearLayout
+            android:id="@+id/routeBar"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:visibility="invisible"
+            android:elevation="10dp"
+            android:layout_gravity="bottom"
+            android:orientation="vertical"
+            android:background="@color/colorWhite">
+
+        <TextView
+            android:id="@+id/routeDestination"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="20dp"
+            android:paddingLeft="46dp"
+            android:paddingTop="6dp"
+            android:text="@string/routeTextview_destination"
+            android:textColor="@color/colorGreen"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            tools:context=".HereMapsActivity" />
+        <TextView
+            android:id="@+id/routeDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="46dp"
+            android:layout_marginTop="0dp"
+            android:text="@string/routeTextview_description"
+            android:textColor="@color/colorDarkGrey"
+            android:textSize="13dp"
+            android:textStyle="normal"
+            tools:context=".HereMapsActivity" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+    <include
+        android:id="@+id/navigation"
+        layout="@layout/bottomnavbar" />
+
+</LinearLayout>

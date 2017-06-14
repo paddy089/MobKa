@@ -1,10 +1,12 @@
 package com.example.paddy.mobka;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationMenu;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -26,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_map:
 
-                    Intent i1 = new Intent(MainActivity.this, MapsActivity.class);
+                    //Intent i1 = new Intent(MainActivity.this, MapsActivity.class);
+                    Intent i1 = new Intent(MainActivity.this, HereMapsActivity.class);
                     startActivity(i1);
 
                     return true;

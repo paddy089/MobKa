@@ -1,9 +1,11 @@
 package com.example.paddy.mobka;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,20 +22,16 @@ public class MoreActivity extends AppCompatActivity {
 
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-
                     Intent i0 = new Intent(MoreActivity.this, MainActivity.class);
                     startActivity(i0);
-
                     return true;
+
                 case R.id.navigation_map:
-
-                    Intent i1 = new Intent(MoreActivity.this, MapsActivity.class);
+                    Intent i1 = new Intent(MoreActivity.this, HereMapsActivity.class);
                     startActivity(i1);
-
                     return true;
+
                 case R.id.navigation_more:
-
-
                     return true;
             }
             return false;

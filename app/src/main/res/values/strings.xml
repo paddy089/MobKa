@@ -6,4 +6,14 @@
     <string name="title_activity_maps">Karte</string>
     <string name="title_activity_more">Mehr</string>
     <string name="accessToken">pk.eyJ1IjoicGFkZHkwODkiLCJhIjoiY2ozYmkxMTh4MDA1ZTMybXFxYnFpM3BpcSJ9.QFgSlh_GqSr9vM4i2ZSuEg</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
+        AIzaSyAxk8XvAbZ_DrKnmCmHaykocfZDGSlEIOQ
+    </string>
+    <string name="title_activity_gmaps">Map</string>
+    <string name="title_activity_here_maps">HereMapsActivity</string>
+    <string name="label_button_changescheme">Change Map Scheme</string>
+
+    <string name="label_button_getdirections">Get Directions</string>
+    <string name="routeTextview_destination">Neue Pinakothek</string>
+    <string name="routeTextview_description">-</string>
 </resources>
