@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
@@ -9,59 +8,60 @@
     android:orientation="vertical"
     tools:context="com.example.paddy.mobka.MoreActivity">
 
+
     <FrameLayout
         android:id="@+id/content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1">
 
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="120dp"
             android:gravity="center_horizontal"
+            android:text="Einstellungen"
             android:textColor="@color/colorDarkGrey"
             android:textSize="20sp"
-            android:visibility="visible"
-            tools:text="Einstellungen" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textColor="@color/colorDarkGrey"
-                android:gravity="center"
-                android:layout_marginTop="182dp"
-                tools:text="Offline Karten"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-            android:textColor="@color/colorDarkGrey"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="284dp"
-                tools:text="Quellen"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textColor="@color/colorDarkGrey"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="346dp"
-                tools:text="Feedback"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textColor="@color/colorDarkGrey"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="408dp"
-                tools:text="Impressum"
-                />
+            android:visibility="visible" />
 
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="182dp"
+            android:gravity="center"
+            android:textColor="@color/colorDarkGrey"
+            android:textSize="20sp"
+            android:text="Offline Karten" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="284dp"
+            android:gravity="center_horizontal"
+            android:textColor="@color/colorDarkGrey"
+            android:textSize="20sp"
+            android:text="Quellen" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="346dp"
+            android:gravity="center_horizontal"
+            android:textColor="@color/colorDarkGrey"
+            android:textSize="20sp"
+            android:text="Feedback" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="408dp"
+            android:gravity="center_horizontal"
+            android:textColor="@color/colorDarkGrey"
+            android:textSize="20sp"
+            android:text="Impressum" />
 
 
     </FrameLayout>

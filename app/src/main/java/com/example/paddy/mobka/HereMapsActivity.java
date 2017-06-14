@@ -278,8 +278,6 @@ public class HereMapsActivity extends AppCompatActivity {
             MapMarker m = new MapMarker(new GeoCoordinate(48.147082, 11.571514), poiImage);
             map.addMapObject(m);
 
-            //List h = map.getSelectedObjects(m.getAnchorPoint());
-
         } catch (IOException e) {
             finish();
             //e.printStackTrace();
@@ -315,6 +313,9 @@ public class HereMapsActivity extends AppCompatActivity {
             poiIsActive = false;
             map.removeMapObject(mapRoute);
             routingBarLayout.setVisibility(View.INVISIBLE);
+//            map.setZoomLevel((map.getMaxZoomLevel() + map.getMinZoomLevel()) / 1, Map.Animation.LINEAR);
+//
+//            map.setCenter();
 
         }
     }
@@ -405,6 +406,7 @@ public class HereMapsActivity extends AppCompatActivity {
 
         // START:
 
+        //GeoCoordinate myCoordinates = posManager.getPosition().getCoordinate();
         GeoCoordinate myCoordinates = posManager.getLastKnownPosition().getCoordinate();
         routePlan.addWaypoint(new GeoCoordinate(myCoordinates.getLatitude(), myCoordinates.getLongitude()));
 
