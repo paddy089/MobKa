@@ -275,13 +275,12 @@ public class HereMapsActivity extends AppCompatActivity {
 
     private void drawPOI(){
 
-        //48.147082, 11.571514
-
         try {
             Image poiImage = new Image();
             poiImage.setImageResource(R.mipmap.ic_poi_inactive);
+            //poiImage.setImageResource(R.drawable.ic_nav_home_active);
             MapMarker m = new MapMarker(new GeoCoordinate(48.147082, 11.571514), poiImage);
-            m.setTitle("Neue Pinakothek");
+            m.setTitle("Pinakothek d. Moderne");
             map.addMapObject(m);
 
         } catch (IOException e) {
@@ -293,7 +292,7 @@ public class HereMapsActivity extends AppCompatActivity {
             Image poiImage = new Image();
             poiImage.setImageResource(R.mipmap.ic_poi_inactive);
             MapMarker m = new MapMarker(new GeoCoordinate(48.149689, 11.570581), poiImage);
-            m.setTitle("Pinakothek d. Moderne");
+            m.setTitle("Neue Pinakothek");
             map.addMapObject(m);
 
         } catch (IOException e) {
@@ -323,21 +322,31 @@ public class HereMapsActivity extends AppCompatActivity {
         } else {
             map.removeMapObject(mapRoute);
 
+            Image poiImage = null;
+
+            try {
+                poiImage = new Image();
+                poiImage.setImageResource(R.mipmap.ic_poi_inactive);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                finish();
+            }
+
             if (lastSelectedMapMarker == selectedMapMarker){
+
                 routeIsActive = false;
+                selectedMapMarker.setIcon(poiImage);
                 selectedMapMarker = null;
                 routingBarLayout.setVisibility(View.INVISIBLE);
 
             } else {
+
+                lastSelectedMapMarker.setIcon(poiImage);
                 lastSelectedMapMarker = selectedMapMarker;
                 getDirections();
 
             }
-
-//            map.setZoomLevel((map.getMaxZoomLevel() + map.getMinZoomLevel()) / 1, Map.Animation.LINEAR);
-//
-//            map.setCenter();
-
         }
     }
 
@@ -391,10 +400,11 @@ public class HereMapsActivity extends AppCompatActivity {
 
         RouteManager routeManager = new RouteManager();
 
+        // Set route options
         RoutePlan routePlan = new RoutePlan();
         RouteOptions routeOptions = new RouteOptions();
         routeOptions.setTransportMode(RouteOptions.TransportMode.PEDESTRIAN);
-        routeOptions.setRouteType(RouteOptions.Type.SHORTEST);
+        routeOptions.setRouteType(RouteOptions.Type.FASTEST);
         routeOptions.setParksAllowed(true);
         routePlan.setRouteOptions(routeOptions);
 
@@ -408,6 +418,16 @@ public class HereMapsActivity extends AppCompatActivity {
         GeoCoordinate sMMCoords = selectedMapMarker.getCoordinate();
         routePlan.addWaypoint(new GeoCoordinate(sMMCoords.getLatitude(), sMMCoords.getLongitude()));
 
+        try {
+            Image poiImage = new Image();
+            poiImage.setImageResource(R.mipmap.ic_poi_active);
+            selectedMapMarker.setIcon(poiImage);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            finish();
+        }
+
         // Calculate route
         RouteManager.Error error =
                 routeManager.calculateRoute(routePlan, routeManagerListener);
@@ -418,7 +438,7 @@ public class HereMapsActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT)
                     .show();*/
             Toast.makeText(getApplicationContext(),
-                    "Route calculation failed",
+                    "Routenberechnung fehlgeschlagen!",
                     Toast.LENGTH_SHORT)
                     .show();
         }
@@ -451,8 +471,6 @@ public class HereMapsActivity extends AppCompatActivity {
     private MapGesture.OnGestureListener gestureListener = new MapGesture.OnGestureListener.OnGestureListenerAdapter() {
         @Override
         public boolean onMapObjectsSelected(List<ViewObject> objects) {
-            // There are various types of map objects, but we only want
-            // to handle the MapMarkers we have added
             for (ViewObject viewObj : objects) {
                 if (viewObj.getBaseType() == ViewObject.Type.USER_OBJECT) {
                     if (((MapObject)viewObj).getType() == MapObject.Type.MARKER) {
@@ -480,9 +498,6 @@ public class HereMapsActivity extends AppCompatActivity {
             posManager.start(
                     PositioningManager.LocationMethod.GPS_NETWORK);
         }
-        /*if (gestureListener != null){
-            mapFragment.getMapGesture().addOnGestureListener(gestureListener);
-        }*/
     }
 
     public void onPause() {
