@@ -200,7 +200,6 @@ public class HereMapsActivity extends AppCompatActivity {
         }
     }
 
-
     /**
      * Checks the dynamically-controlled permissions and requests missing permissions from end user.
      */
@@ -245,7 +244,6 @@ public class HereMapsActivity extends AppCompatActivity {
                 break;
         }
     }
-
     private void handleMenuStuff() {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -319,37 +317,37 @@ public class HereMapsActivity extends AppCompatActivity {
         if (!routeIsActive){
             routeIsActive = true;
             getDirections();
+
         } else {
             map.removeMapObject(mapRoute);
 
-            Image poiImage = null;
-
             try {
-                poiImage = new Image();
+                Image poiImage = new Image();
                 poiImage.setImageResource(R.mipmap.ic_poi_inactive);
+
+                if (lastSelectedMapMarker == selectedMapMarker){
+
+                    routeIsActive = false;
+                    selectedMapMarker.setIcon(poiImage);
+                    selectedMapMarker = null;
+                    routingBarLayout.setVisibility(View.INVISIBLE);
+
+                } else {
+
+                    lastSelectedMapMarker.setIcon(poiImage);
+                    lastSelectedMapMarker = selectedMapMarker;
+                    getDirections();
+
+                }
+
 
             } catch (IOException e) {
                 e.printStackTrace();
                 finish();
             }
 
-            if (lastSelectedMapMarker == selectedMapMarker){
-
-                routeIsActive = false;
-                selectedMapMarker.setIcon(poiImage);
-                selectedMapMarker = null;
-                routingBarLayout.setVisibility(View.INVISIBLE);
-
-            } else {
-
-                lastSelectedMapMarker.setIcon(poiImage);
-                lastSelectedMapMarker = selectedMapMarker;
-                getDirections();
-
-            }
         }
     }
-
 
     private RouteManager.Listener routeManagerListener =
             new RouteManager.Listener() {
@@ -466,7 +464,6 @@ public class HereMapsActivity extends AppCompatActivity {
                 }
             };
 
-
     // Override onMapObjectsSelected gesture listener
     private MapGesture.OnGestureListener gestureListener = new MapGesture.OnGestureListener.OnGestureListenerAdapter() {
         @Override
@@ -489,7 +486,6 @@ public class HereMapsActivity extends AppCompatActivity {
             return false;
         }
     };
-
 
     public void onResume() {
         super.onResume();
