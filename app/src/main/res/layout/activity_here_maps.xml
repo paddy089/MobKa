@@ -33,7 +33,7 @@
             android:onClick="changeScheme"
             android:src="@drawable/ic_map_layers" />
 
-        <ImageButton
+       <!-- <ImageButton
             android:id="@+id/poi1_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
             android:elevation="40dp"
             android:backgroundTint="@android:color/transparent"
             android:onClick="checkGetDirections"
-            android:src="@drawable/ic_poi_inactive" />
+            android:src="@drawable/ic_poi_inactive" />-->
         <!-- android:onClick="getDirections" -->
 
         <LinearLayout

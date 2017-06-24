@@ -30,7 +30,6 @@ import com.here.android.mpa.mapping.MapGesture;
 import com.here.android.mpa.mapping.MapMarker;
 import com.here.android.mpa.mapping.MapObject;
 import com.here.android.mpa.mapping.MapRoute;
-import com.here.android.mpa.mapping.PositionIndicator;
 import com.here.android.mpa.routing.RouteManager;
 import com.here.android.mpa.routing.RouteOptions;
 import com.here.android.mpa.routing.RoutePlan;
@@ -102,7 +101,10 @@ public class HereMapsActivity extends AppCompatActivity {
     private PositioningManager posManager;
 
     private boolean paused = false;
-    private boolean poiIsActive = false;
+    private boolean routeIsActive = false;
+
+    private MapMarker selectedMapMarker = null;
+    private MapMarker lastSelectedMapMarker = null;
 
 
     @Override
@@ -127,7 +129,10 @@ public class HereMapsActivity extends AppCompatActivity {
                     OnEngineInitListener.Error error) {
                 if (error == OnEngineInitListener.Error.NONE) {
 
+                    // Add listeners
                     initPosManager();
+                    mapFragment.getMapGesture().addOnGestureListener(gestureListener);
+
                     onMapFragmentInitializationCompleted();
 
                 } else {
@@ -276,6 +281,7 @@ public class HereMapsActivity extends AppCompatActivity {
             Image poiImage = new Image();
             poiImage.setImageResource(R.mipmap.ic_poi_inactive);
             MapMarker m = new MapMarker(new GeoCoordinate(48.147082, 11.571514), poiImage);
+            m.setTitle("Neue Pinakothek");
             map.addMapObject(m);
 
         } catch (IOException e) {
@@ -287,6 +293,7 @@ public class HereMapsActivity extends AppCompatActivity {
             Image poiImage = new Image();
             poiImage.setImageResource(R.mipmap.ic_poi_inactive);
             MapMarker m = new MapMarker(new GeoCoordinate(48.149689, 11.570581), poiImage);
+            m.setTitle("Pinakothek d. Moderne");
             map.addMapObject(m);
 
         } catch (IOException e) {
@@ -305,14 +312,28 @@ public class HereMapsActivity extends AppCompatActivity {
         posManager.start(PositioningManager.LocationMethod.GPS_NETWORK);
     }
 
-    public void checkGetDirections(View view){
-        if (!poiIsActive){
-            poiIsActive = true;
-            getDirections(view);
+    public void checkGetDirections(){
+
+        if (lastSelectedMapMarker == null)
+            lastSelectedMapMarker = selectedMapMarker;
+
+        if (!routeIsActive){
+            routeIsActive = true;
+            getDirections();
         } else {
-            poiIsActive = false;
             map.removeMapObject(mapRoute);
-            routingBarLayout.setVisibility(View.INVISIBLE);
+
+            if (lastSelectedMapMarker == selectedMapMarker){
+                routeIsActive = false;
+                selectedMapMarker = null;
+                routingBarLayout.setVisibility(View.INVISIBLE);
+
+            } else {
+                lastSelectedMapMarker = selectedMapMarker;
+                getDirections();
+
+            }
+
 //            map.setZoomLevel((map.getMaxZoomLevel() + map.getMinZoomLevel()) / 1, Map.Animation.LINEAR);
 //
 //            map.setCenter();
@@ -320,30 +341,6 @@ public class HereMapsActivity extends AppCompatActivity {
         }
     }
 
-    private void createMarkerListener(){
-        // Create a gesture listener and add it to the MapFragment
-        MapGesture.OnGestureListener listener =
-                new MapGesture.OnGestureListener.OnGestureListenerAdapter() {
-                    @Override
-                    public boolean onMapObjectsSelected(List<ViewObject> objects) {
-                        for (ViewObject viewObj : objects) {
-                            if (viewObj.getBaseType() == ViewObject.Type.USER_OBJECT) {
-                                if (((MapObject)viewObj).getType() == MapObject.Type.MARKER) {
-                                    // At this point we have the originally added
-                                    // map marker, so we can do something with it
-                                    // (like change the visibility, or more
-                                    // marker-specific actions)
-                                    ((MapObject)viewObj).setVisible(false);
-
-                                }
-                            }
-                        }
-                        // return false to allow the map to handle this callback also
-                        return false;
-                    }
-
-                };
-    }
 
     private RouteManager.Listener routeManagerListener =
             new RouteManager.Listener() {
@@ -364,6 +361,10 @@ public class HereMapsActivity extends AppCompatActivity {
 
                         routingBarLayout.setVisibility(View.VISIBLE);
 
+                        routingBarTitle.setText(
+                                String.format("%s",
+                                        selectedMapMarker.getTitle()));
+
                         routingBarDesc.setText(
                                 String.format("%d Meter",
                                         result.get(0).getRoute().getLength()));
@@ -380,42 +381,34 @@ public class HereMapsActivity extends AppCompatActivity {
                 }
             };
 
-    // Functionality for taps of the "Get Directions" button
-    public void getDirections(View view) {
+    public void getDirections() {
 
-        // 1. clear previous results
         routingBarDesc.setText("");
         if (map != null && mapRoute != null) {
             map.removeMapObject(mapRoute);
             mapRoute = null;
         }
 
-        // 2. Initialize RouteManager
         RouteManager routeManager = new RouteManager();
 
-        // 3. Select routing options via RoutingMode
         RoutePlan routePlan = new RoutePlan();
-
         RouteOptions routeOptions = new RouteOptions();
         routeOptions.setTransportMode(RouteOptions.TransportMode.PEDESTRIAN);
         routeOptions.setRouteType(RouteOptions.Type.SHORTEST);
         routeOptions.setParksAllowed(true);
-
         routePlan.setRouteOptions(routeOptions);
 
 
-        // START:
-
+        // Starting point:
         //GeoCoordinate myCoordinates = posManager.getPosition().getCoordinate();
         GeoCoordinate myCoordinates = posManager.getLastKnownPosition().getCoordinate();
         routePlan.addWaypoint(new GeoCoordinate(myCoordinates.getLatitude(), myCoordinates.getLongitude()));
 
-        //routePlan.addWaypoint(new GeoCoordinate(48.146893, 11.570602));
+        // End point:
+        GeoCoordinate sMMCoords = selectedMapMarker.getCoordinate();
+        routePlan.addWaypoint(new GeoCoordinate(sMMCoords.getLatitude(), sMMCoords.getLongitude()));
 
-        // END:
-        routePlan.addWaypoint(new GeoCoordinate(48.149667, 11.571123));
-
-        // 5. Retrieve Routing information via RouteManagerListener
+        // Calculate route
         RouteManager.Error error =
                 routeManager.calculateRoute(routePlan, routeManagerListener);
 
@@ -454,7 +447,32 @@ public class HereMapsActivity extends AppCompatActivity {
             };
 
 
-    // Resume positioning listener on wake up
+    // Override onMapObjectsSelected gesture listener
+    MapGesture.OnGestureListener gestureListener = new MapGesture.OnGestureListener.OnGestureListenerAdapter() {
+        @Override
+        public boolean onMapObjectsSelected(List<ViewObject> objects) {
+            // There are various types of map objects, but we only want
+            // to handle the MapMarkers we have added
+            for (ViewObject viewObj : objects) {
+                if (viewObj.getBaseType() == ViewObject.Type.USER_OBJECT) {
+                    if (((MapObject)viewObj).getType() == MapObject.Type.MARKER) {
+
+                        // save the selected marker to use during route calculation
+                        System.out.println("Selected Marker found!");
+                        selectedMapMarker = ((MapMarker) viewObj);
+                        checkGetDirections();
+
+                        // If user has tapped multiple markers, just display one route
+                        break;
+                    }
+                }
+            }
+            // return false to allow the map to handle this callback as well
+            return false;
+        }
+    };
+
+
     public void onResume() {
         super.onResume();
         paused = false;
@@ -462,9 +480,11 @@ public class HereMapsActivity extends AppCompatActivity {
             posManager.start(
                     PositioningManager.LocationMethod.GPS_NETWORK);
         }
+        if (gestureListener != null){
+            mapFragment.getMapGesture().addOnGestureListener(gestureListener);
+        }
     }
 
-    // To pause positioning listener
     public void onPause() {
         if (posManager != null) {
             posManager.stop();
@@ -473,12 +493,14 @@ public class HereMapsActivity extends AppCompatActivity {
         paused = true;
     }
 
-    // To remove the positioning listener
     public void onDestroy() {
         if (posManager != null) {
             // Cleanup
             posManager.removeListener(
                     positionListener);
+        }
+        if (gestureListener != null){
+            mapFragment.getMapGesture().removeOnGestureListener(gestureListener);
         }
         map = null;
         super.onDestroy();
