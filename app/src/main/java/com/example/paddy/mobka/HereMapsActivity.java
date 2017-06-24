@@ -454,7 +454,7 @@ public class HereMapsActivity extends AppCompatActivity {
                     if (!paused) {
                         map.setCenter(position.getCoordinate(),
                                 Map.Animation.NONE);
-                        map.setZoomLevel(map.getMaxZoomLevel() - 2, Map.Animation.LINEAR);
+                        map.setZoomLevel(map.getMaxZoomLevel() - 3, Map.Animation.LINEAR);
                         System.out.println("onPositionUpdated");
                     }
                 }
