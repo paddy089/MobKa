@@ -312,7 +312,7 @@ public class HereMapsActivity extends AppCompatActivity {
         posManager.start(PositioningManager.LocationMethod.GPS_NETWORK);
     }
 
-    public void checkGetDirections(){
+    private void checkGetDirections(){
 
         if (lastSelectedMapMarker == null)
             lastSelectedMapMarker = selectedMapMarker;
@@ -448,7 +448,7 @@ public class HereMapsActivity extends AppCompatActivity {
 
 
     // Override onMapObjectsSelected gesture listener
-    MapGesture.OnGestureListener gestureListener = new MapGesture.OnGestureListener.OnGestureListenerAdapter() {
+    private MapGesture.OnGestureListener gestureListener = new MapGesture.OnGestureListener.OnGestureListenerAdapter() {
         @Override
         public boolean onMapObjectsSelected(List<ViewObject> objects) {
             // There are various types of map objects, but we only want
@@ -480,9 +480,9 @@ public class HereMapsActivity extends AppCompatActivity {
             posManager.start(
                     PositioningManager.LocationMethod.GPS_NETWORK);
         }
-        if (gestureListener != null){
+        /*if (gestureListener != null){
             mapFragment.getMapGesture().addOnGestureListener(gestureListener);
-        }
+        }*/
     }
 
     public void onPause() {
